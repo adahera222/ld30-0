@@ -64,6 +64,7 @@ Crafty.c('Player', {
       .twoway(5, 5)
       .gravity('Ground')
       .onHit('Wall', this.stopMovement)
+      .onHit('Ground', this.stopJump)
       .onHit('Javelin', this.pickUpJavelin);
     this.color('GREEN');
   },
@@ -74,6 +75,10 @@ Crafty.c('Player', {
       this.x -= this._movement.x;
       this.y -= this._movement.y;
     }
+  },
+
+  stopJump: function() {
+    this._up = false;
   },
 
   pickUpJavelin: function(javelins) {
