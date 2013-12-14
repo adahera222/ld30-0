@@ -11,6 +11,8 @@ Crafty.scene('Level1', function() {
   Crafty.e('Player').at(1, 1);
   this.occupied[1][1] = true;
 
+  Crafty.e ('Javelin').at(Game.map_grid.width - 3, 1);
+
   for (var x = 0; x < Game.map_grid.width; x++) {
     for (var y = 0; y < Game.map_grid.height; y++) {
       var at_edge = x == 0 ||

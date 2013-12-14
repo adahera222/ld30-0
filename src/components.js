@@ -33,6 +33,16 @@ Crafty.c('Ground', {
   },
 });
 
+Crafty.c('Javelin', {
+  init: function() {
+    this.requires('2D, Canvas, Grid, Gravity, Collision, Color')
+      .gravity('Ground')
+      .attr({w: Game.map_grid.tile.width * 2, h: Game.map_grid.tile.height / 8});;
+    this.color('YELLOW');
+    
+  }
+})
+
 Crafty.c('Player', {
   init: function() {
     this.requires('2D, Canvas, Grid, Color, Gravity, Collision, Twoway, Solid')
