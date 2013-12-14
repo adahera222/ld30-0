@@ -48,7 +48,8 @@ Crafty.c('Player', {
     this.requires('2D, Canvas, Grid, Color, Gravity, Collision, Twoway, Solid')
       .twoway(5, 5)
       .gravity('Ground')
-      .onHit('Wall', this.stopMovement);
+      .onHit('Wall', this.stopMovement)
+      .onHit('Javelin', this.pickUpJavelin);
     this.color('GREEN');
   },
 
@@ -60,4 +61,9 @@ Crafty.c('Player', {
     }
   },
 
+  pickUpJavelin: function(javelins) {
+    javelin = javelins[0].obj;
+    javelin.attr({x: this.x - this.w / 2, y: this.y + this.h / 4});
+    javelin.antigravity();
+  },
 });
