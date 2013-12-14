@@ -2,10 +2,10 @@ Game = {
 
   map_grid : { 
     width: 30,
-    height: 25,
+    height: 20,
     tile : {
-      width : 16,
-      height: 16
+      width : 32,
+      height: 32
     }
   },
 

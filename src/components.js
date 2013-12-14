@@ -67,7 +67,7 @@ Crafty.c('Bow', {
   },
 });
 
-var ARROW_SPEED = 10;
+var ARROW_SPEED = 20;
 
 Crafty.c('Arrow', {
   init: function(bow) {
@@ -141,7 +141,7 @@ Crafty.c('Arrow', {
 });
 
 var PLAYER_SPEED = 5;
-var PLAYER_JUMP = 5;
+var PLAYER_JUMP = 8;
 
 Crafty.c('Player', {
 

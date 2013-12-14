@@ -15,7 +15,7 @@ Crafty.scene('Game', function() {
     for (var y = 0; y < Game.map_grid.height; y++) {
       var at_edge = x == 0 ||
                     x == Game.map_grid.width - 1;
-      var at_bottom = y == 1 && x != 12 && x != 13 && x != 14 && x != 15 && x != 16||
+      var at_bottom = y == 1 && x != 12 && x != 13 && x != 14 && x != 15 && x != 16 ||
                       y == Game.map_grid.height - 1;
  
       if (at_edge) {
@@ -25,7 +25,7 @@ Crafty.scene('Game', function() {
       }
 
       else if (at_bottom ||
-               x > 4 && x < 25 && y == 20) {
+               x > 4 && x < 25 && y == Game.map_grid.height - 6) {
         Crafty.e('Ground').at(x, y);
         this.occupied[x][y] = true;
       }
