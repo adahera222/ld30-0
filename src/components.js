@@ -140,11 +140,14 @@ Crafty.c('Arrow', {
   },
 });
 
+var PLAYER_SPEED = 5;
+var PLAYER_JUMP = 5;
+
 Crafty.c('Player', {
 
   init: function() {
-    this.requires('2D, Canvas, Grid, Color, Gravity, Collision, Twoway, Solid, MouseFace')
-      .twoway(5, 5)
+    this.requires('2D, Canvas, Grid, Color, Gravity, Collision, Twoway, MouseFace')
+      .twoway(PLAYER_SPEED, PLAYER_JUMP)
       .gravity('Ground')
       .bind('EnterFrame', this.updateBowPosition)
       .onHit('Wall', this.stopMovement)
@@ -182,4 +185,47 @@ Crafty.c('Player', {
       arrow.shootFromBow(this._bow);
     }
   },
+});
+
+var ENEMY_SPEED = 3;
+
+/**
+  When you spawn an enemy, it must be given a -startMovingInDirection
+  call before it begins moving
+*/
+Crafty.c('Enemy', {
+  init: function() {
+    this.requires('2D, Canvas, Grid, Color, Gravity, Collision')
+      .attr({
+        speed: ENEMY_SPEED,
+        moving: false
+      })
+      .onHit('Wall', this.reverseDirection)
+      .onHit('Arrow', this.kill)
+      .bind('EnterFrame', this.updatePosition)
+      .gravity('Ground');
+  },
+
+  updatePosition: function() {
+    if (this.moving) {
+      this.x += this.speed;
+    }
+  },
+
+  reverseDirection: function() {
+    this.speed *= -1;
+  },
+
+  startMovingInDirection: function(direction) {
+    if (direction == 'left') {
+      this.reverseDirection();
+    }
+    this.moving = true;
+  },
+
+  kill: function(entities) {
+    // TODO death animation
+    this.destroy();
+  }
+
 });

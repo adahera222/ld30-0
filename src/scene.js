@@ -8,14 +8,15 @@ Crafty.scene('Level1', function() {
     }
   }
 
-  Crafty.e('Player').at(1, 1);
+  Crafty.e('Player').at(14, 17);
   this.occupied[1][1] = true;
 
   for (var x = 0; x < Game.map_grid.width; x++) {
     for (var y = 0; y < Game.map_grid.height; y++) {
       var at_edge = x == 0 ||
                     x == Game.map_grid.width - 1;
-      var at_bottom = y == Game.map_grid.height - 1;
+      var at_bottom = y == 1 && x != 12 && x != 13 && x != 14 && x != 15 && x != 16||
+                      y == Game.map_grid.height - 1;
  
       if (at_edge) {
         // Place a platform entity at the current tile
@@ -27,6 +28,10 @@ Crafty.scene('Level1', function() {
                x > 4 && x < 25 && y == 20) {
         Crafty.e('Ground').at(x, y);
         this.occupied[x][y] = true;
+      }
+      else if (x == 5 && y == 0) {
+        var enemy = Crafty.e('Enemy').at(x, y);
+        enemy.startMovingInDirection('right');
       }
     }
   }
