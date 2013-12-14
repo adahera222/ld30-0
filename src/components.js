@@ -33,14 +33,25 @@ Crafty.c('Ground', {
   },
 });
 
-Crafty.c('Javelin', {
+Crafty.c('Bow', {
 
   init: function() {
-    this.requires('2D, Canvas, Grid, Gravity, Collision, Color, MouseFace')
-      .attr({w: Game.map_grid.tile.width * 2, h: Game.map_grid.tile.height / 8})
-      .gravity('Ground')
+    this.requires('2D, Canvas, Color, MouseFace')
+      .attr({
+        w: Game.map_grid.tile.width * 2,
+        h: Game.map_grid.tile.height / 8
+      })
       .origin(this.w / 2, this.h / 2);
     this.color('YELLOW');
+    this.startTrackingMouse();
+  },
+
+  arrowOriginX: function() {
+    return this._x + this._w / 2;
+  },
+
+  arrowOriginY: function() {
+    return this._y + this.h / 2;
   },
 
   startTrackingMouse: function() {
@@ -54,19 +65,60 @@ Crafty.c('Javelin', {
     this.moving = false;
     this.unbind('MouseMoved');
   },
-})
+});
+
+var ARROW_SPEED = 10;
+
+Crafty.c('Arrow', {
+  init: function(bow) {
+    this.requires('2D, Canvas, Color, Gravity, Gravity, Collision');
+  },
+
+  shootFromBow: function(bow) {
+    this.attr({
+      x: bow.arrowOriginX(),
+      y: bow.arrowOriginY(),
+      w: 3,
+      h: 3,
+      speed: ARROW_SPEED,
+      angle: bow.getAngle()
+    })
+    .color('PINK')
+    .bind('EnterFrame', function(frame) {
+      this.x += Math.cos(this.angle) * this.speed;
+      this.y += Math.sin(this.angle) * this.speed;
+    })
+    .onHit('Ground', this.removeArrow)
+    .onHit('Wall', this.removeArrow)
+    .gravity('Ground');
+  },
+
+  removeArrow: function() {
+    this.destroy();
+  },
+});
 
 Crafty.c('Player', {
-  _hasJavelin: false,
 
   init: function() {
-    this.requires('2D, Canvas, Grid, Color, Gravity, Collision, Twoway, Solid')
+    this.requires('2D, Canvas, Grid, Color, Gravity, Collision, Twoway, Solid, MouseFace')
       .twoway(5, 5)
       .gravity('Ground')
+      .bind('EnterFrame', this.updateBowPosition)
       .onHit('Wall', this.stopMovement)
       .onHit('Ground', this.stopJump)
-      .onHit('Javelin', this.pickUpJavelin);
+      .bind('MouseUp', this.shootBow);
     this.color('GREEN');
+
+    this._bow = Crafty.e('Bow');
+  },
+
+  updateBowPosition: function() {
+    // Update the bow track with the player
+    this._bow.attr({
+      x: this.x - this.w / 2,
+      y: this.y + this.h / 4
+    });
   },
 
   stopMovement: function() {
@@ -79,17 +131,14 @@ Crafty.c('Player', {
 
   stopJump: function() {
     this._up = false;
+    this._falling = true;
   },
 
-  pickUpJavelin: function(javelins) {
-    javelin = javelins[0].obj;
-    javelin.attr({x: this.x - this.w / 2, y: this.y + this.h / 4});
-
-    if (this._hasJavelin == false) {
-      javelin.antigravity();
-      javelin.startTrackingMouse();
-      
-      this._hasJavelin = true;
+  shootBow: function(data) {
+    if (data.mouseButton == Crafty.mouseButtons.LEFT) {
+      console.log('shoot');
+      var arrow = Crafty.e('Arrow');
+      arrow.shootFromBow(this._bow);
     }
   },
 });
