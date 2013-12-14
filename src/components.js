@@ -76,20 +76,62 @@ Crafty.c('Arrow', {
 
   shootFromBow: function(bow) {
     this.attr({
+      xInitial: bow.arrowOriginX(),
+      yInitial: bow.arrowOriginY(),
       x: bow.arrowOriginX(),
       y: bow.arrowOriginY(),
-      w: 3,
+      w: 10,
       h: 3,
       speed: ARROW_SPEED,
-      angle: bow.getAngle()
+      angle: bow.getAngle(),
+      rotation: bow.getAngle() * 180 / Math.PI
     })
     .color('PINK')
     .bind('EnterFrame', function(frame) {
-      this.x += Math.cos(this.angle) * this.speed;
-      this.y += Math.sin(this.angle) * this.speed;
+      var dX = Math.cos(this.angle) * this.speed;
+      var dY = Math.sin(this.angle) * this.speed;
+
+      this.x += dX;
+      this.y += dY;
+
+      var sumY = dY + this._gy;
+
+      // If I have time, refactor this arrow rotation code
+      if (sumY < 0) {
+        // Going upwards
+        // Level off from the current angle
+        if (this.rotation < 270) {
+          // Going upwards to the left
+          var remainingAngleToLevel = this.rotation - 180;
+          var dRotation = remainingAngleToLevel / 50;
+          this.rotation -= dRotation;
+        }
+        else {
+          // Going upwards to the right
+          var remainingAngleToLevel = 360 - this.rotation;
+          var dRotation = remainingAngleToLevel / 50;
+          this.rotation += dRotation;
+        }
+      }
+      else {
+        // Going downwards
+        if (this.rotation < 270 && this.rotation > 90) {
+          // Going downwards to the left
+          var remainingAngleToVertical = this.rotation - 90;
+          var dRotation = remainingAngleToVertical / 50;
+          this.rotation -= dRotation;
+        }
+        else {
+          // Going downwards to the right
+          var remainingAngleToVertical = 90 - this.rotation;
+          var dRotation = remainingAngleToVertical / 200;
+          this.rotation -= dRotation;
+        }
+      }
+      
     })
-    .onHit('Ground', this.removeArrow)
     .onHit('Wall', this.removeArrow)
+    .bind('hit', this.removeArrow)
     .gravity('Ground');
   },
 
