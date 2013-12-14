@@ -152,6 +152,7 @@ Crafty.c('Player', {
       .bind('EnterFrame', this.updateBowPosition)
       .onHit('Wall', this.stopMovement)
       .onHit('Ground', this.stopJump)
+      .onHit('Enemy', this.die)
       .bind('MouseUp', this.shootBow);
     this.color('GREEN');
 
@@ -185,6 +186,11 @@ Crafty.c('Player', {
       arrow.shootFromBow(this._bow);
     }
   },
+
+  die: function() {
+    this.destroy();
+    Crafty.trigger('PlayerKilled', this);
+  },
 });
 
 var ENEMY_SPEED = 3;
@@ -201,7 +207,7 @@ Crafty.c('Enemy', {
         moving: false
       })
       .onHit('Wall', this.reverseDirection)
-      .onHit('Arrow', this.kill)
+      .onHit('Arrow', this.die)
       .bind('EnterFrame', this.updatePosition)
       .gravity('Ground');
   },
@@ -223,9 +229,9 @@ Crafty.c('Enemy', {
     this.moving = true;
   },
 
-  kill: function(entities) {
+  die: function(entities) {
     // TODO death animation
+    // TODO death sound
     this.destroy();
-  }
-
+  },
 });

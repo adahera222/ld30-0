@@ -20,6 +20,6 @@ Game = {
   start: function() {
     Crafty.init(Game.width(), Game.height());
     Crafty.background('black');
-    Crafty.scene('Level1');
+    Crafty.scene('Game');
   },
 }

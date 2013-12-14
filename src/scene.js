@@ -1,4 +1,4 @@
-Crafty.scene('Level1', function() {
+Crafty.scene('Game', function() {
 
   this.occupied = new Array(Game.map_grid.width);
   for (var i = 0; i < Game.map_grid.width; i++) {
@@ -35,4 +35,17 @@ Crafty.scene('Level1', function() {
       }
     }
   }
+
+  this.show_game_over = this.bind('PlayerKilled', function() {
+    Crafty.e('2D, DOM, Text')
+      .text('Game Over')
+      .textColor('#FFFFFF', 1)
+      .attr({
+        x: 0,
+        y: Game.height() / 2,
+        w: Game.width()
+      });
+  });
+}, function() {
+  this.unbind('PlayerKilled', this.show_game_over);
 });
