@@ -34,16 +34,31 @@ Crafty.c('Ground', {
 });
 
 Crafty.c('Javelin', {
+
   init: function() {
-    this.requires('2D, Canvas, Grid, Gravity, Collision, Color')
+    this.requires('2D, Canvas, Grid, Gravity, Collision, Color, MouseFace')
+      .attr({w: Game.map_grid.tile.width * 2, h: Game.map_grid.tile.height / 8})
       .gravity('Ground')
-      .attr({w: Game.map_grid.tile.width * 2, h: Game.map_grid.tile.height / 8});;
+      .origin(this.w / 2, this.h / 2);
     this.color('YELLOW');
-    
-  }
+  },
+
+  startTrackingMouse: function() {
+    this.moving = true;
+    this.bind('MouseMoved', function(entity) {
+      this.rotation = this.getAngle() * (180 / Math.PI);
+    });
+  },
+
+  stopTrackingMouse: function() {
+    this.moving = false;
+    this.unbind('MouseMoved');
+  },
 })
 
 Crafty.c('Player', {
+  _hasJavelin: false,
+
   init: function() {
     this.requires('2D, Canvas, Grid, Color, Gravity, Collision, Twoway, Solid')
       .twoway(5, 5)
@@ -64,6 +79,12 @@ Crafty.c('Player', {
   pickUpJavelin: function(javelins) {
     javelin = javelins[0].obj;
     javelin.attr({x: this.x - this.w / 2, y: this.y + this.h / 4});
-    javelin.antigravity();
+
+    if (this._hasJavelin == false) {
+      javelin.antigravity();
+      javelin.startTrackingMouse();
+      
+      this._hasJavelin = true;
+    }
   },
 });
