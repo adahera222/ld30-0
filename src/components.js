@@ -136,7 +136,6 @@ Crafty.c('Player', {
 
   shootBow: function(data) {
     if (data.mouseButton == Crafty.mouseButtons.LEFT) {
-      console.log('shoot');
       var arrow = Crafty.e('Arrow');
       arrow.shootFromBow(this._bow);
     }
