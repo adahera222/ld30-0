@@ -321,6 +321,24 @@ Crafty.c('Enemy', {
   die: function(entities) {
     // TODO death animation
     this.destroy();
+    Crafty('Score').addEnemyKill();
     Crafty.audio.play('arrow_hit_enemy');
+  },
+});
+
+Crafty.c('Score', {
+  init: function() {
+    this.requires('2D, DOM, Grid, Text')
+      .attr({ w: Game.width(),
+              h: Game.map_grid.tile.height,
+              score: 0
+      })
+      .text("Kills: 0")
+      .textColor('#FFFFFF');
+  },
+
+  addEnemyKill: function() {
+    this.score++;
+    this.text('Kills: ' + this.score);
   },
 });

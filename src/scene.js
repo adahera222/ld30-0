@@ -54,6 +54,8 @@ Crafty.scene('Loading', function() {
 
 Crafty.scene('Game', function() {
 
+  Crafty.e('Score').at(0, 0);
+
   this.occupied = new Array(Game.map_grid.width);
   for (var i = 0; i < Game.map_grid.width; i++) {
     this.occupied[i] = new Array(Game.map_grid.height);
