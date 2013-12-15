@@ -11,6 +11,7 @@ Crafty.scene('Loading', function() {
   Crafty.load(['assets/platform.png',
                'assets/wall.png',
                'assets/player.png',
+               'assets/enemy.png',
                'assets/bow.png',
                'assets/arrow.png',
                'assets/arrow_hit_enemy.wav',
@@ -23,6 +24,10 @@ Crafty.scene('Loading', function() {
 
     Crafty.sprite(16, 24, 'assets/player.png', {
       spr_player: [0, 0]
+    });
+
+    Crafty.sprite(18, 18, 'assets/enemy.png', {
+      spr_enemy: [0, 0]
     });
 
     Crafty.sprite(24, 24, 'assets/bow.png', {
@@ -124,7 +129,7 @@ Crafty.scene('Game', function() {
         y = -1;
         break;
       case 2:
-        x = 28;
+        x = 26;
         y = -1;
         direction = 'left';
         break;

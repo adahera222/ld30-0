@@ -291,7 +291,7 @@ var ENEMY_SPEED = 2;
 */
 Crafty.c('Enemy', {
   init: function() {
-    this.requires('2D, Canvas, Grid, Color, Gravity, Collision')
+    this.requires('2D, Canvas, Grid, Gravity, Collision, SpriteAnimation, spr_enemy')
       .attr({
         speed: ENEMY_SPEED,
         moving: false
@@ -300,7 +300,9 @@ Crafty.c('Enemy', {
       .onHit('Arrow', this.hitWithArrow)
       .onHit('KillEverythingBlock', this.die)
       .bind('EnterFrame', this.updatePosition)
-      .gravity('Ground');
+      .gravity('Ground')
+      .reel('EnemyMoving', 400, 0, 0, 1)
+      .animate('EnemyMoving', -1);
   },
 
   updatePosition: function() {
@@ -310,12 +312,21 @@ Crafty.c('Enemy', {
   },
 
   reverseDirection: function() {
+    if (this.speed > 0) {
+      this.unflip();
+    }
+    else {
+      this.flip();
+    }
     this.speed *= -1;
   },
 
   startMovingInDirection: function(direction) {
     if (direction == 'left') {
       this.reverseDirection();
+    }
+    else {
+      this.flip();
     }
     this.moving = true;
   },
