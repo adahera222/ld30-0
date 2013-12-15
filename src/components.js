@@ -145,7 +145,6 @@ Crafty.c('Arrow', {
           this.rotation -= dRotation;
         }
       }
-      
     })
     .onHit('Wall', this.stopArrow)
     .onHit('Ground', this.stopArrow)
@@ -163,7 +162,6 @@ var PLAYER_SPEED = 5;
 var PLAYER_JUMP = 6;
 
 Crafty.c('Player', {
-
   init: function() {
     this.requires('2D, Canvas, Grid, Gravity, Collision, Twoway, MouseFace, spr_player')
       .twoway(PLAYER_SPEED, PLAYER_JUMP)
@@ -178,16 +176,33 @@ Crafty.c('Player', {
       .onHit('Wall', this.stopMovement)
       .onHit('Ground', this.toggleJump)
       .onHit('Enemy', this.die)
-      .bind('MouseUp', this.shootBow);
+      .bind('MouseUp', this.shootBow)
+      .bind('MouseMoved', function(entity) {
+        // Flip the user to face the mouse pointer
+        switch (this.getDirection()) {
+          case this._directions.left:
+            this.flip();
+            this._bowXOffset = -this.w / 4;
+            this._bowYOffset = -2;
+            break;
+          case this._directions.right:
+            this.unflip();
+            this._bowXOffset = this.w / 4;
+            this._bowYOffset = -4;
+            break;
+        }
+      });
 
     this._bow = Crafty.e('Bow');
+    this._bowXOffset = this.w / 4;
+    this._bowYOffset = -4;
   },
 
   updateBowPosition: function() {
     // Update the bow track with the player
     this._bow.attr({
-      x: this.x + this.w / 4,
-      y: this.y - 4
+      x: this.x + this._bowXOffset,
+      y: this.y + this._bowYOffset
     });
   },
 
