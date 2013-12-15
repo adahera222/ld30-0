@@ -163,35 +163,27 @@ var PLAYER_JUMP = 6;
 
 Crafty.c('Player', {
   init: function() {
-    this.requires('2D, Canvas, Grid, Gravity, Collision, Twoway, MouseFace, spr_player')
+    this.requires('2D, Canvas, Grid, Gravity, Collision, Twoway, MouseFace, SpriteAnimation, spr_player')
       .twoway(PLAYER_SPEED, PLAYER_JUMP)
       .gravity('Ground')
       .bind('EnterFrame', this.updateBowPosition)
-      .bind('Moved', function(from) {
-        var hit = !!this.hit('Ground');
-        if (hit) {
-          this.y = from.y;
-        }
-      })
       .onHit('Wall', this.stopMovement)
       .onHit('Ground', this.toggleJump)
       .onHit('Enemy', this.die)
       .bind('MouseUp', this.shootBow)
-      .bind('MouseMoved', function(entity) {
-        // Flip the user to face the mouse pointer
-        switch (this.getDirection()) {
-          case this._directions.left:
-            this.flip();
-            this._bowXOffset = -this.w / 4;
-            this._bowYOffset = -2;
-            break;
-          case this._directions.right:
-            this.unflip();
-            this._bowXOffset = this.w / 4;
-            this._bowYOffset = -4;
-            break;
-        }
+      .bind('MouseMoved', this.faceMouse)
+      .reel('PlayerMoving', 400, 0, 0, 5)
+      .bind("KeyDown", function (e) {
+        if (e.key === Crafty.keys.LEFT_ARROW ||
+            e.key === Crafty.keys.A ||
+            e.key === Crafty.keys.RIGHT_ARROW ||
+            e.key === Crafty.keys.D)
+          this.animate('PlayerMoving', -1);
+      })
+      .bind('KeyUp', function(e) {
+        this.pauseAnimation();
       });
+
 
     this._bow = Crafty.e('Bow');
     this._bowXOffset = this.w / 4;
@@ -223,6 +215,22 @@ Crafty.c('Player', {
       var arrow = Crafty.e('Arrow');
       arrow.shootFromBow(this._bow);
       Crafty.audio.play('arrow_shot');
+    }
+  },
+
+  faceMouse: function() {
+    // Flip the user to face the mouse pointer
+    switch (this.getDirection()) {
+      case this._directions.left:
+        this.flip();
+        this._bowXOffset = -this.w / 4;
+        this._bowYOffset = -2;
+        break;
+      case this._directions.right:
+        this.unflip();
+        this._bowXOffset = this.w / 4;
+        this._bowYOffset = -4;
+        break;
     }
   },
 
