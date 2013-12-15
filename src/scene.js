@@ -238,14 +238,6 @@ Crafty.scene('Game', function() {
         y: Game.height() / 2 + (Game.map_grid.tile.height * 1),
         w: Game.width()
       });
-    Crafty.e('2D, DOM, Text')
-      .text('Created by @adammika for Ludum Dare 28')
-      .textColor('#FFFFFF', 1)
-      .attr({
-        x: 0,
-        y: Game.height() - (Game.map_grid.tile.height * 1),
-        w: Game.width()
-      });
 
     // restart game on spacebar
     this.bind('KeyDown', function(e) {
