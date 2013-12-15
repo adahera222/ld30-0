@@ -61,7 +61,7 @@ Crafty.scene('Loading', function() {
 Crafty.scene('Title', function() {
 
   Crafty.e('2D, DOM, Text')
-      .text('Press Q to Start')
+      .text('Press E to Start')
       .textColor('#FFFFFF', 1)
       .textFont({
         size: '18px',
@@ -114,7 +114,7 @@ Crafty.scene('Title', function() {
   }
 
   this.bind("KeyDown", function (e) {
-    if (e.key === Crafty.keys.Q)
+    if (e.key === Crafty.keys.E)
       Crafty.scene('Game');
   });
 
@@ -214,7 +214,7 @@ Crafty.scene('Game', function() {
     }
 
     Crafty.e('Enemy').at(x, y).startMovingInDirection(direction);
-  }, 1000);
+  }, 750);
 
   // Add kill everything blocks at the bottom of the level
   var y = 25
@@ -238,7 +238,7 @@ Crafty.scene('Game', function() {
       .textFont({
         size: '14px'
       })
-      .text('Press Q to Restart')
+      .text('Press E to Restart')
       .textColor('#FFFFFF', 1)
       .attr({
         x: 0,
@@ -248,7 +248,7 @@ Crafty.scene('Game', function() {
 
     // restart game on spacebar
     this.bind('KeyDown', function(e) {
-      if (e.key === Crafty.keys.Q) {
+      if (e.key === Crafty.keys.E) {
         Crafty.scene('Game');
       }
     });
