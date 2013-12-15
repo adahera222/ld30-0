@@ -109,6 +109,7 @@ var ARROW_SPEED = 10;
 Crafty.c('Arrow', {
   init: function(bow) {
     this.requires('2D, Canvas, Gravity, Gravity, Collision, spr_arrow');
+    this.hitWall = false;
   },
 
   shootFromBow: function(bow) {
@@ -121,7 +122,6 @@ Crafty.c('Arrow', {
       angle: bow.getAngle(),
       rotation: bow.getAngle() * 180 / Math.PI,
       shot: false,
-      hitWall: false,
     })
     .bind('EnterFrame', function(frame) {
 
@@ -198,6 +198,7 @@ Crafty.c('Player', {
       .onHit('Wall', this.stopMovement)
       .onHit('Ground', this.toggleJump)
       .onHit('Enemy', this.die)
+      .onHit('KillEverythingBlock', this.die)
       .onHit('Arrow', this.pickUpArrow)
       .bind('MouseUp', this.shootBow)
       .bind('MouseMoved', this.faceMouse)
@@ -296,7 +297,8 @@ Crafty.c('Enemy', {
         moving: false
       })
       .onHit('Wall', this.reverseDirection)
-      .onHit('Arrow', this.die)
+      .onHit('Arrow', this.hitWithArrow)
+      .onHit('KillEverythingBlock', this.die)
       .bind('EnterFrame', this.updatePosition)
       .gravity('Ground');
   },
@@ -318,11 +320,17 @@ Crafty.c('Enemy', {
     this.moving = true;
   },
 
+  hitWithArrow: function(entities) {
+    var arrow = Crafty('Arrow');
+    if (!arrow.hitWall) {
+      Crafty('Score').addEnemyKill();
+      Crafty.audio.play('arrow_hit_enemy');
+      this.die();
+    }
+  },
+
   die: function(entities) {
-    // TODO death animation
     this.destroy();
-    Crafty('Score').addEnemyKill();
-    Crafty.audio.play('arrow_hit_enemy');
   },
 });
 
@@ -340,5 +348,11 @@ Crafty.c('Score', {
   addEnemyKill: function() {
     this.score++;
     this.text('Kills: ' + this.score);
+  },
+});
+
+Crafty.c('KillEverythingBlock', { 
+  init: function() {
+    this.requires('2D, Canvas, Collision, Grid');
   },
 });

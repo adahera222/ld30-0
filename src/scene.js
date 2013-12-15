@@ -71,7 +71,7 @@ Crafty.scene('Game', function() {
   this.level[6] =   [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1];
   this.level[7] =   [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1];
   this.level[8] =   [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1];
-  this.level[9] =   [1, 0, 0, 0, 0, 2, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 2, 0, 0, 0, 0, 1];
+  this.level[9] =   [1, 0, 0, 0, 0, 2, 2, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 2, 2, 0, 0, 0, 0, 1];
   this.level[10] =  [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1];
   this.level[11] =  [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1];
   this.level[12] =  [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1];
@@ -120,59 +120,33 @@ Crafty.scene('Game', function() {
 
     switch(spawnPosition) {
       case 1:
-        console.log('case 1');
         x = 1;
         y = -1;
         break;
       case 2:
-        console.log('case 2');
         x = 28;
         y = -1;
         direction = 'left';
         break;
       case 3:
-        console.log('case 3');
         x = -1;
-        y = 1;
-        break;
+        y = 2;
+        break;      
       case 4:
-        console.log('case 4 ');
         x = 30;
-        y = 1;
+        y = 2;
         direction = 'left'
         break;
     }
 
-    // console.log('Spawning at [' + x + ',' + y + '] position: ' + spawnPosition);
     Crafty.e('Enemy').at(x, y).startMovingInDirection(direction);
-  }, 100);
+  }, 2000);
 
-
-  // Crafty.e('Player').at(14, 17);
-
-
-  // for (var x = 0; x < Game.map_grid.width; x++) {
-  //   for (var y = 0; y < Game.map_grid.height; y++) {
-  //     var at_edge = x == 0 ||
-  //                   x == Game.map_grid.width - 1;
-  //     var at_bottom = y == 1 && x != 12 && x != 13 && x != 14 && x != 15 && x != 16 ||
-  //                     y == Game.map_grid.height - 1;
- 
-  //     if (at_edge) {
-  //       // Place a platform entity at the current tile
-  //       Crafty.e('Wall').at(x, y);
-  //     }
-
-  //     else if (at_bottom ||
-  //              x > 4 && x < 25 && y == Game.map_grid.height - 6) {
-  //       Crafty.e('Ground').at(x, y);
-  //     }
-  //     else if (x == 5 && y == 0) {
-  //       var enemy = Crafty.e('Enemy').at(x, y);
-  //       enemy.startMovingInDirection('right');
-  //     }
-  //   }
-  // }
+  // Add kill everything blocks at the bottom of the level
+  var y = 25
+  for (var x = -30; x < Game.map_grid.width + 30; x++) {
+    Crafty.e('KillEverythingBlock').at(x, y);
+  }
 
   this.show_game_over = this.bind('PlayerKilled', function() {
     Crafty.e('2D, DOM, Text')
@@ -180,7 +154,7 @@ Crafty.scene('Game', function() {
       .textColor('#FFFFFF', 1)
       .attr({
         x: 0,
-        y: Game.height() / 2,
+        y: Game.height() / 2 - (Game.map_grid.tile.height * 2),
         w: Game.width()
       });
   });
