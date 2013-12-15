@@ -67,7 +67,9 @@ Crafty.c('Bow', {
   },
 });
 
-var ARROW_SPEED = 20;
+var ARROW_WIDTH = Game.map_grid.tile.width;
+var ARROW_HEIGHT = 3;
+var ARROW_SPEED = 10;
 
 Crafty.c('Arrow', {
   init: function(bow) {
@@ -80,14 +82,23 @@ Crafty.c('Arrow', {
       yInitial: bow.arrowOriginY(),
       x: bow.arrowOriginX(),
       y: bow.arrowOriginY(),
-      w: 10,
-      h: 3,
+      w: ARROW_WIDTH,
+      h: ARROW_HEIGHT,
       speed: ARROW_SPEED,
       angle: bow.getAngle(),
-      rotation: bow.getAngle() * 180 / Math.PI
+      rotation: bow.getAngle() * 180 / Math.PI,
+      shot: false,
     })
     .color('PINK')
     .bind('EnterFrame', function(frame) {
+
+      if (this.shot && this._gy == 0) {
+        this.stopArrow();
+        return;
+      }
+
+      this.shot = true;
+
       var dX = Math.cos(this.angle) * this.speed;
       var dY = Math.sin(this.angle) * this.speed;
 
@@ -130,13 +141,14 @@ Crafty.c('Arrow', {
       }
       
     })
-    .onHit('Wall', this.removeArrow)
-    .bind('hit', this.removeArrow)
+    .onHit('Wall', this.stopArrow)
+    .onHit('Ground', this.stopArrow)
     .gravity('Ground');
   },
 
-  removeArrow: function() {
-    this.destroy();
+  stopArrow: function() {
+    this.antigravity();
+    this.unbind('EnterFrame');
     Crafty.audio.play('arrow_hit_wall');
   },
 });
@@ -196,6 +208,7 @@ Crafty.c('Player', {
 
   die: function() {
     this.destroy();
+    this._bow.stopTrackingMouse();
     Crafty.trigger('PlayerKilled', this);
     Crafty.audio.play('death');
   },
