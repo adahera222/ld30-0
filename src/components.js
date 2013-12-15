@@ -30,7 +30,6 @@ Crafty.c('Ground', {
   init: function() {
     this.requires('2D, Canvas, Collision, Grid, spr_platform')
       .collision([0, 0],[this.w, 0],[this.w, this.h], [0, this.h]);
-    console.log('w: ' + this.w + ' h: ' + this.h);
   },
 });
 
