@@ -1,3 +1,5 @@
+var enemySpawnerInterval;
+
 Crafty.scene('Loading', function() {
   Crafty.e('2D, DOM, Text')
     .text('Loading...')
@@ -59,7 +61,7 @@ Crafty.scene('Loading', function() {
 Crafty.scene('Title', function() {
 
   Crafty.e('2D, DOM, Text')
-      .text('Press Spacebar to Start')
+      .text('Press Q to Start')
       .textColor('#FFFFFF', 1)
       .textFont({
         size: '18px',
@@ -112,7 +114,7 @@ Crafty.scene('Title', function() {
   }
 
   this.bind("KeyDown", function (e) {
-    if (e.key === Crafty.keys.SPACE)
+    if (e.key === Crafty.keys.Q)
       Crafty.scene('Game');
   });
 
@@ -120,6 +122,11 @@ Crafty.scene('Title', function() {
 
 
 Crafty.scene('Game', function() {
+
+  // Unbind spacebar to restart and 
+  // stop the enemy spawner, as we are about to make a new one
+  this.unbind('KeyDown');
+  clearInterval(enemySpawnerInterval);
 
   Crafty.e('Score').at(0, 0);
 
@@ -170,7 +177,7 @@ Crafty.scene('Game', function() {
   }
 
 
-  setInterval(function () {
+  enemySpawnerInterval = setInterval(function () {
     if (Crafty.isPaused()) {
       return;
     }
@@ -231,7 +238,7 @@ Crafty.scene('Game', function() {
       .textFont({
         size: '14px'
       })
-      .text('Press Space to Restart')
+      .text('Press Q to Restart')
       .textColor('#FFFFFF', 1)
       .attr({
         x: 0,
@@ -241,7 +248,7 @@ Crafty.scene('Game', function() {
 
     // restart game on spacebar
     this.bind('KeyDown', function(e) {
-      if (e.key === Crafty.keys.SPACE) {
+      if (e.key === Crafty.keys.Q) {
         Crafty.scene('Game');
       }
     });

@@ -124,7 +124,6 @@ Crafty.c('Arrow', {
       shot: false,
     })
     .bind('EnterFrame', function(frame) {
-
       if (this.shot && this._gy == 0) {
         this.stopArrow();
         return;
