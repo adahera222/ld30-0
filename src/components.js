@@ -352,6 +352,9 @@ Crafty.c('Score', {
               h: Game.map_grid.tile.height,
               score: 0
       })
+      .textFont({
+        size: '14px'
+      })
       .text("Kills: 0")
       .textColor('#FFFFFF');
   },

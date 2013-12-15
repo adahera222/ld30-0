@@ -52,8 +52,70 @@ Crafty.scene('Loading', function() {
       death:            ['assets/death.wav']
     });
 
-    Crafty.scene('Game'); 
+    Crafty.scene('Title'); 
   });
+});
+
+Crafty.scene('Title', function() {
+
+  Crafty.e('2D, DOM, Text')
+      .text('Press Spacebar to Start')
+      .textColor('#FFFFFF', 1)
+      .textFont({
+        size: '18px',
+      })
+      .attr({
+        x: 0,
+        y: Game.height() / 2,
+        w: Game.width(),
+      });
+
+  this.titleLevel = new Array(Game.map_grid.width);
+  this.titleLevel[0] =   [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1];
+  this.titleLevel[1] =   [1, 0, 2, 2, 2, 2, 0, 2, 0, 0, 0, 0, 2, 0, 2, 2, 2, 2, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 1];
+  this.titleLevel[2] =   [1, 0, 2, 0, 0, 2, 0, 2, 2, 0, 0, 0, 2, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 1];
+  this.titleLevel[3] =   [1, 0, 2, 0, 0, 2, 0, 2, 0, 2, 0, 0, 2, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 1];
+  this.titleLevel[4] =   [1, 0, 2, 0, 0, 2, 0, 2, 0, 0, 2, 0, 2, 0, 2, 2, 2, 0, 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 1];
+  this.titleLevel[5] =   [1, 0, 2, 0, 0, 2, 0, 2, 0, 0, 0, 2, 2, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 1];
+  this.titleLevel[6] =   [1, 0, 2, 0, 0, 2, 0, 2, 0, 0, 0, 0, 2, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 1];
+  this.titleLevel[7] =   [1, 0, 2, 2, 2, 2, 0, 2, 0, 0, 0, 0, 2, 0, 2, 2, 2, 2, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 1];
+  this.titleLevel[8] =   [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1];
+  this.titleLevel[9] =   [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1];
+  this.titleLevel[10] =  [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1];
+  this.titleLevel[11] =  [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1];
+  this.titleLevel[12] =  [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1];
+  this.titleLevel[13] =  [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1];
+  this.titleLevel[14] =  [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1];
+  this.titleLevel[15] =  [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1];
+  this.titleLevel[16] =  [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1];
+  this.titleLevel[17] =  [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1];
+  this.titleLevel[18] =  [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1];
+  this.titleLevel[19] =  [2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2];
+
+
+  for (var row = 0; row < Game.map_grid.height; row++) {
+    for (var column = 0; column < Game.map_grid.width; column++) {
+      var type = this.titleLevel[row][column];
+      switch(type) {
+        case 1:
+          Crafty.e('Wall').at(column, row);
+          break;
+        case 2:
+          Crafty.e('Ground').at(column, row);
+          break;
+        case 3:
+          Crafty.e('Player').at(column, row);
+          break;
+      }
+
+    }
+  }
+
+  this.bind("KeyDown", function (e) {
+    if (e.key === Crafty.keys.SPACE)
+      Crafty.scene('Game');
+  });
+
 });
 
 
@@ -145,7 +207,7 @@ Crafty.scene('Game', function() {
     }
 
     Crafty.e('Enemy').at(x, y).startMovingInDirection(direction);
-  }, 500);
+  }, 1000);
 
   // Add kill everything blocks at the bottom of the level
   var y = 25
@@ -155,6 +217,9 @@ Crafty.scene('Game', function() {
 
   this.show_game_over = this.bind('PlayerKilled', function() {
     Crafty.e('2D, DOM, Text')
+      .textFont({
+        size: '28px'
+      })
       .text('Game Over')
       .textColor('#FFFFFF', 1)
       .attr({
@@ -162,6 +227,33 @@ Crafty.scene('Game', function() {
         y: Game.height() / 2 - (Game.map_grid.tile.height * 2),
         w: Game.width()
       });
+    Crafty.e('2D, DOM, Text')
+      .textFont({
+        size: '14px'
+      })
+      .text('Press Space to Restart')
+      .textColor('#FFFFFF', 1)
+      .attr({
+        x: 0,
+        y: Game.height() / 2 + (Game.map_grid.tile.height * 1),
+        w: Game.width()
+      });
+    Crafty.e('2D, DOM, Text')
+      .text('Created by @adammika for Ludum Dare 28')
+      .textColor('#FFFFFF', 1)
+      .attr({
+        x: 0,
+        y: Game.height() - (Game.map_grid.tile.height * 1),
+        w: Game.width()
+      });
+
+    // restart game on spacebar
+    this.bind('KeyDown', function(e) {
+      if (e.key === Crafty.keys.SPACE) {
+        Crafty.scene('Game');
+      }
+    });
+
   });
 }, function() {
   this.unbind('PlayerKilled', this.show_game_over);
