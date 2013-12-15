@@ -39,7 +39,7 @@ Crafty.c('Bow', {
 
     var player = Crafty('Player');
 
-    this.requires('2D, Canvas, MouseFace, spr_bow')
+    this.requires('2D, Canvas, MouseFace, spr_bow_arrow')
       .origin(8 ,12);
     this.startTrackingMouse();
   },
@@ -58,12 +58,12 @@ Crafty.c('Bow', {
       this.rotation = this.getAngle() * (180 / Math.PI);
     });
     this.bind('MouseDown', function() {
-      this.removeComponent('spr_bow');
-      this.addComponent('spr_bow_pulled');
+      this.removeComponent('spr_bow_arrow');
+      this.addComponent('spr_bow_arrow_pulled');
     });
     this.bind('MouseUp', function() {
-      this.removeComponent('spr_bow_pulled');
-      this.addComponent('spr_bow');
+      this.removeComponent('spr_bow_arrow_pulled');
+      this.addComponent('spr_bow_arrow');
     });
   },
 
@@ -79,7 +79,7 @@ var ARROW_SPEED = 10;
 
 Crafty.c('Arrow', {
   init: function(bow) {
-    this.requires('2D, Canvas, Color, Gravity, Gravity, Collision');
+    this.requires('2D, Canvas, Gravity, Gravity, Collision, spr_arrow');
   },
 
   shootFromBow: function(bow) {
@@ -88,14 +88,11 @@ Crafty.c('Arrow', {
       yInitial: bow.arrowOriginY(),
       x: bow.arrowOriginX(),
       y: bow.arrowOriginY(),
-      w: ARROW_WIDTH,
-      h: ARROW_HEIGHT,
       speed: ARROW_SPEED,
       angle: bow.getAngle(),
       rotation: bow.getAngle() * 180 / Math.PI,
       shot: false,
     })
-    .color('PINK')
     .bind('EnterFrame', function(frame) {
 
       if (this.shot && this._gy == 0) {

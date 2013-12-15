@@ -12,6 +12,7 @@ Crafty.scene('Loading', function() {
                'assets/wall.png',
                'assets/player.png',
                'assets/bow.png',
+               'assets/arrow.png',
                'assets/arrow_hit_enemy.wav',
                'assets/arrow_hit_wall.wav',
                'assets/arrow_shot.wav',
@@ -24,13 +25,19 @@ Crafty.scene('Loading', function() {
       spr_player: [0, 0]
     });
 
-    Crafty.sprite(17, 24, 'assets/bow.png', {
-      spr_bow:          [0, 0],
-      spr_bow_pulled:   [1, 0]
+    Crafty.sprite(24, 24, 'assets/bow.png', {
+      spr_bow_no_arrow:          [1, 0],
+      spr_bow_no_arrow_pulled:   [1, 0],
+      spr_bow_arrow:             [2, 0],
+      spr_bow_arrow_pulled:   [3, 0]
     });
 
     Crafty.sprite(18, 'assets/wall.png', {
       spr_wall: [0, 0]
+    });
+
+    Crafty.sprite(18, 7, 'assets/arrow.png', {
+      spr_arrow: [0, 0]
     });
 
     Crafty.audio.add({
