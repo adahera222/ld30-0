@@ -1,3 +1,28 @@
+Crafty.scene('Loading', function() {
+  Crafty.e('2D, DOM, Text')
+    .text('Loading...')
+    .textColor('#FFFFFF')
+    .attr({
+      x: 0,
+      y: Game.height() / 2,
+      w: Game.width()
+    });
+
+  Crafty.load(['assets/platform.png',
+               'assets/wall.png'], function() {
+    Crafty.sprite(16, 'assets/platform.png', {
+      spr_platform: [0, 0]
+    });
+
+    Crafty.sprite(18, 'assets/wall.png', {
+      spr_wall: [0, 0]
+    });
+
+    Crafty.scene('Game'); 
+  });
+});
+
+
 Crafty.scene('Game', function() {
 
   this.occupied = new Array(Game.map_grid.width);

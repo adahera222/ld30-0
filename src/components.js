@@ -21,15 +21,16 @@ Crafty.c('Grid', {
 
 Crafty.c('Wall', {
   init: function() {
-    this.requires('2D, Canvas, Grid, Color');
-    this.color('BROWN');
+    this.requires('2D, Canvas, Collision, Grid, spr_wall')
+      .crop(1, 1, 16, 16);
   },
 });
 
 Crafty.c('Ground', {
   init: function() {
-    this.requires('2D, Canvas, Grid, Color');
-    this.color('RED');
+    this.requires('2D, Canvas, Collision, Grid, spr_platform')
+      .collision([0, 0],[this.w, 0],[this.w, this.h], [0, this.h]);
+    console.log('w: ' + this.w + ' h: ' + this.h);
   },
 });
 
@@ -141,7 +142,7 @@ Crafty.c('Arrow', {
 });
 
 var PLAYER_SPEED = 5;
-var PLAYER_JUMP = 8;
+var PLAYER_JUMP = 6;
 
 Crafty.c('Player', {
 
@@ -150,8 +151,14 @@ Crafty.c('Player', {
       .twoway(PLAYER_SPEED, PLAYER_JUMP)
       .gravity('Ground')
       .bind('EnterFrame', this.updateBowPosition)
+      .bind('Moved', function(from) {
+        var hit = !!this.hit('Ground');
+        if (hit) {
+          this.y = from.y;
+        }
+      })
       .onHit('Wall', this.stopMovement)
-      .onHit('Ground', this.stopJump)
+      .onHit('Ground', this.toggleJump)
       .onHit('Enemy', this.die)
       .bind('MouseUp', this.shootBow);
     this.color('GREEN');
@@ -175,9 +182,8 @@ Crafty.c('Player', {
     }
   },
 
-  stopJump: function() {
+  toggleJump: function() {
     this._up = false;
-    this._falling = true;
   },
 
   shootBow: function(data) {
@@ -193,7 +199,7 @@ Crafty.c('Player', {
   },
 });
 
-var ENEMY_SPEED = 3;
+var ENEMY_SPEED = 2;
 
 /**
   When you spawn an enemy, it must be given a -startMovingInDirection

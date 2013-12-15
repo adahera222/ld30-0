@@ -4,8 +4,8 @@ Game = {
     width: 30,
     height: 20,
     tile : {
-      width : 32,
-      height: 32
+      width : 16,
+      height: 16
     }
   },
 
@@ -19,7 +19,7 @@ Game = {
 
   start: function() {
     Crafty.init(Game.width(), Game.height());
-    Crafty.background('black');
-    Crafty.scene('Game');
+    Crafty.background('blue');
+    Crafty.scene('Loading');
   },
 }
