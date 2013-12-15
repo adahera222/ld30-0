@@ -1,5 +1,3 @@
-var enemySpawnerInterval;
-
 Crafty.scene('Loading', function() {
   Crafty.e('2D, DOM, Text')
     .text('Loading...')
@@ -126,7 +124,7 @@ Crafty.scene('Game', function() {
   // Unbind spacebar to restart and 
   // stop the enemy spawner, as we are about to make a new one
   this.unbind('KeyDown');
-  clearInterval(enemySpawnerInterval);
+  this.unbind('PlayerKilled');
 
   Crafty.e('Score').at(0, 0);
 
@@ -176,8 +174,7 @@ Crafty.scene('Game', function() {
     }
   }
 
-
-  enemySpawnerInterval = setInterval(function () {
+  var enemySpawnerInterval = setInterval(function () {
     if (Crafty.isPaused()) {
       return;
     }
@@ -223,6 +220,10 @@ Crafty.scene('Game', function() {
   }
 
   this.show_game_over = this.bind('PlayerKilled', function() {
+
+    // Stop spawning enemies
+    clearInterval(enemySpawnerInterval);
+
     Crafty.e('2D, DOM, Text')
       .textFont({
         size: '28px'
@@ -249,11 +250,15 @@ Crafty.scene('Game', function() {
     // restart game on spacebar
     this.bind('KeyDown', function(e) {
       if (e.key === Crafty.keys.E) {
-        Crafty.scene('Game');
+        Crafty.scene('RestartGame');
       }
     });
 
   });
 }, function() {
   this.unbind('PlayerKilled', this.show_game_over);
+});
+
+Crafty.scene('RestartGame', function() {
+  Crafty.scene('Game');
 });
