@@ -26,10 +26,10 @@ Crafty.scene('Loading', function() {
     });
 
     Crafty.sprite(24, 24, 'assets/bow.png', {
-      spr_bow_no_arrow:          [1, 0],
+      spr_bow_no_arrow:          [0, 0],
       spr_bow_no_arrow_pulled:   [1, 0],
       spr_bow_arrow:             [2, 0],
-      spr_bow_arrow_pulled:   [3, 0]
+      spr_bow_arrow_pulled:      [3, 0]
     });
 
     Crafty.sprite(18, 'assets/wall.png', {

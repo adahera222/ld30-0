@@ -36,12 +36,12 @@ Crafty.c('Ground', {
 Crafty.c('Bow', {
 
   init: function() {
-
     var player = Crafty('Player');
 
     this.requires('2D, Canvas, MouseFace, spr_bow_arrow')
       .origin(8 ,12);
     this.startTrackingMouse();
+    this._pulledBack = true;
   },
 
   arrowOriginX: function() {
@@ -58,12 +58,29 @@ Crafty.c('Bow', {
       this.rotation = this.getAngle() * (180 / Math.PI);
     });
     this.bind('MouseDown', function() {
+      var player = Crafty('Player');
       this.removeComponent('spr_bow_arrow');
-      this.addComponent('spr_bow_arrow_pulled');
+      this.removeComponent('spr_bow_no_arrow');
+
+      if (player._hasArrow) {
+        this.addComponent('spr_bow_arrow_pulled');
+      }
+      else {
+        this.addComponent('spr_bow_no_arrow_pulled');
+      }
     });
     this.bind('MouseUp', function() {
+      var player = Crafty('Player');
       this.removeComponent('spr_bow_arrow_pulled');
-      this.addComponent('spr_bow_arrow');
+      this.removeComponent('spr_bow_no_arrow_pulled');
+
+      if (player._hasArrow) {
+        this.addComponent('spr_bow_arrow');  
+      }
+      else {
+        this.addComponent('spr_bow_no_arrow');
+      }
+      
     });
   },
 
@@ -71,6 +88,18 @@ Crafty.c('Bow', {
     this.moving = false;
     this.unbind('MouseMoved');
   },
+
+  arrowPickedUp: function() {
+    this.removeComponent('spr_bow_no_arrow');
+    this.removeComponent('spr_bow_no_arrow_pulled');
+
+    if (this._pulledBack) {
+      this.addComponent('spr_bow_arrow_pulled');
+    }
+    else {
+      this.addComponent('spr_bow_arrow');
+    }
+  }
 });
 
 var ARROW_WIDTH = Game.map_grid.tile.width;
@@ -92,6 +121,7 @@ Crafty.c('Arrow', {
       angle: bow.getAngle(),
       rotation: bow.getAngle() * 180 / Math.PI,
       shot: false,
+      hitWall: false,
     })
     .bind('EnterFrame', function(frame) {
 
@@ -149,6 +179,7 @@ Crafty.c('Arrow', {
   },
 
   stopArrow: function() {
+    this.hitWall = true;
     this.antigravity();
     this.unbind('EnterFrame');
     Crafty.audio.play('arrow_hit_wall');
@@ -167,6 +198,7 @@ Crafty.c('Player', {
       .onHit('Wall', this.stopMovement)
       .onHit('Ground', this.toggleJump)
       .onHit('Enemy', this.die)
+      .onHit('Arrow', this.pickUpArrow)
       .bind('MouseUp', this.shootBow)
       .bind('MouseMoved', this.faceMouse)
       .reel('PlayerMoving', 400, 0, 0, 5)
@@ -181,7 +213,7 @@ Crafty.c('Player', {
         this.pauseAnimation();
       });
 
-
+    this._hasArrow = true;
     this._bow = Crafty.e('Bow');
     this._bowXOffset = this.w / 4;
     this._bowYOffset = -4;
@@ -208,10 +240,11 @@ Crafty.c('Player', {
   },
 
   shootBow: function(data) {
-    if (data.mouseButton == Crafty.mouseButtons.LEFT) {
+    if (data.mouseButton == Crafty.mouseButtons.LEFT && this._hasArrow) {
       var arrow = Crafty.e('Arrow');
       arrow.shootFromBow(this._bow);
       Crafty.audio.play('arrow_shot');
+      this._hasArrow = false;
     }
   },
 
@@ -234,8 +267,18 @@ Crafty.c('Player', {
   die: function() {
     this.destroy();
     this._bow.stopTrackingMouse();
+    this._bow.destroy();
     Crafty.trigger('PlayerKilled', this);
     Crafty.audio.play('death');
+  },
+
+  pickUpArrow: function(entities) {
+    var arrow = entities[0].obj;
+    if (arrow.hitWall) {
+      arrow.destroy();
+      this._hasArrow = true;
+      this._bow.arrowPickedUp();
+    }
   },
 });
 
