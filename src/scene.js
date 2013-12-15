@@ -129,7 +129,7 @@ Crafty.scene('Game', function() {
         y = -1;
         break;
       case 2:
-        x = 26;
+        x = 26  ;
         y = -1;
         direction = 'left';
         break;
@@ -145,7 +145,7 @@ Crafty.scene('Game', function() {
     }
 
     Crafty.e('Enemy').at(x, y).startMovingInDirection(direction);
-  }, 2000);
+  }, 500);
 
   // Add kill everything blocks at the bottom of the level
   var y = 25
