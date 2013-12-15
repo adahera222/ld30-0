@@ -36,13 +36,11 @@ Crafty.c('Ground', {
 Crafty.c('Bow', {
 
   init: function() {
-    this.requires('2D, Canvas, Color, MouseFace')
-      .attr({
-        w: Game.map_grid.tile.width * 2,
-        h: Game.map_grid.tile.height / 8
-      })
-      .origin(this.w / 2, this.h / 2);
-    this.color('YELLOW');
+
+    var player = Crafty('Player');
+
+    this.requires('2D, Canvas, MouseFace, spr_bow')
+      .origin(8 ,12);
     this.startTrackingMouse();
   },
 
@@ -58,6 +56,14 @@ Crafty.c('Bow', {
     this.moving = true;
     this.bind('MouseMoved', function(entity) {
       this.rotation = this.getAngle() * (180 / Math.PI);
+    });
+    this.bind('MouseDown', function() {
+      this.removeComponent('spr_bow');
+      this.addComponent('spr_bow_pulled');
+    });
+    this.bind('MouseUp', function() {
+      this.removeComponent('spr_bow_pulled');
+      this.addComponent('spr_bow');
     });
   },
 
@@ -159,7 +165,7 @@ var PLAYER_JUMP = 6;
 Crafty.c('Player', {
 
   init: function() {
-    this.requires('2D, Canvas, Grid, Color, Gravity, Collision, Twoway, MouseFace')
+    this.requires('2D, Canvas, Grid, Gravity, Collision, Twoway, MouseFace, spr_player')
       .twoway(PLAYER_SPEED, PLAYER_JUMP)
       .gravity('Ground')
       .bind('EnterFrame', this.updateBowPosition)
@@ -173,7 +179,6 @@ Crafty.c('Player', {
       .onHit('Ground', this.toggleJump)
       .onHit('Enemy', this.die)
       .bind('MouseUp', this.shootBow);
-    this.color('GREEN');
 
     this._bow = Crafty.e('Bow');
   },
@@ -181,8 +186,8 @@ Crafty.c('Player', {
   updateBowPosition: function() {
     // Update the bow track with the player
     this._bow.attr({
-      x: this.x - this.w / 2,
-      y: this.y + this.h / 4
+      x: this.x + this.w / 4,
+      y: this.y - 4
     });
   },
 
