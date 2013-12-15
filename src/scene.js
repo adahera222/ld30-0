@@ -9,13 +9,24 @@ Crafty.scene('Loading', function() {
     });
 
   Crafty.load(['assets/platform.png',
-               'assets/wall.png'], function() {
+               'assets/wall.png',
+               'assets/arrow_hit_enemy.wav',
+               'assets/arrow_hit_wall.wav',
+               'assets/arrow_shot.wav',
+               'assets/death.wav'], function() {
     Crafty.sprite(16, 'assets/platform.png', {
       spr_platform: [0, 0]
     });
 
     Crafty.sprite(18, 'assets/wall.png', {
       spr_wall: [0, 0]
+    });
+
+    Crafty.audio.add({
+      arrow_hit_enemy:  ['assets/arrow_hit_enemy.wav'],
+      arrow_hit_wall:   ['assets/arrow_hit_wall.wav'],
+      arrow_shot:       ['assets/arrow_shot.wav'],
+      death:            ['assets/death.wav']
     });
 
     Crafty.scene('Game'); 

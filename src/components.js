@@ -138,6 +138,7 @@ Crafty.c('Arrow', {
 
   removeArrow: function() {
     this.destroy();
+    Crafty.audio.play('arrow_hit_wall');
   },
 });
 
@@ -190,12 +191,14 @@ Crafty.c('Player', {
     if (data.mouseButton == Crafty.mouseButtons.LEFT) {
       var arrow = Crafty.e('Arrow');
       arrow.shootFromBow(this._bow);
+      Crafty.audio.play('arrow_shot');
     }
   },
 
   die: function() {
     this.destroy();
     Crafty.trigger('PlayerKilled', this);
+    Crafty.audio.play('death');
   },
 });
 
@@ -237,7 +240,7 @@ Crafty.c('Enemy', {
 
   die: function(entities) {
     // TODO death animation
-    // TODO death sound
     this.destroy();
+    Crafty.audio.play('arrow_hit_enemy');
   },
 });
