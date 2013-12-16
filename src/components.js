@@ -195,7 +195,6 @@ Crafty.c('Player', {
       .gravity('Ground')
       .bind('EnterFrame', this.updateBowPosition)
       .onHit('Wall', this.stopMovement)
-      .onHit('Ground', this.toggleJump)
       .onHit('Enemy', this.die)
       .onHit('KillEverythingBlock', this.die)
       .onHit('Arrow', this.pickUpArrow)
@@ -234,11 +233,7 @@ Crafty.c('Player', {
       this.y -= this._movement.y;
     }
   },
-
-  toggleJump: function() {
-    this._up = false;
-  },
-
+  
   shootBow: function(data) {
     if (data.mouseButton == Crafty.mouseButtons.LEFT && this._hasArrow) {
       var arrow = Crafty.e('Arrow');
